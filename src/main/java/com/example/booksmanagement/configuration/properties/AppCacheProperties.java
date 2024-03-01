@@ -12,7 +12,7 @@ import java.util.Map;
 @ConfigurationProperties(prefix = "app.cache")
 public class AppCacheProperties {
 
-    private final List<String> cacheList = new ArrayList<>();
+    private final List<String> cacheNames = new ArrayList<>();
 
     private final Map<String, CacheProperties> caches = new HashMap<>();
 
@@ -24,7 +24,7 @@ public class AppCacheProperties {
         private Duration expiry = Duration.ZERO;
     }
 
-    public interface CachesNames {
+    public interface CacheNames {
 
         String DATABASE_BOOKS = "databaseBooks";
 

@@ -11,9 +11,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.MessageFormat;
 import java.util.List;
@@ -28,12 +30,12 @@ public class BookServiceImpl implements BookService {
     private final CategoryService categoryService;
 
     @Override
-    @Cacheable(AppCacheProperties.CachesNames.DATABASE_BOOKS)
+    @Cacheable(AppCacheProperties.CacheNames.DATABASE_BOOKS)
     public List<Book> findAll() {
         return repository.findAll();
     }
 
-    @Cacheable(value = AppCacheProperties.CachesNames.DATABASE_BOOKS_BY_ID, key = "#id")
+    @Cacheable(value = AppCacheProperties.CacheNames.DATABASE_BOOKS_BY_ID, key = "#id")
     @Override
     public Book findById(Long id) {
         return repository.findById(id).orElseThrow(() ->
@@ -41,7 +43,7 @@ public class BookServiceImpl implements BookService {
                         .format("Книга с ID {} не найдена!", id)));
     }
 
-    @Cacheable(value = AppCacheProperties.CachesNames.DATABASE_BOOKS_BY_NAME_AND_AUTHOR, key = "#name + #author")
+    @Cacheable(value = AppCacheProperties.CacheNames.DATABASE_BOOKS_BY_NAME_AND_AUTHOR, key = "#name + #author")
     @Override
     public Book findBookByNameAndAuthor(String name, String author) {
         Book probe = new Book();
@@ -57,15 +59,21 @@ public class BookServiceImpl implements BookService {
                 new EntityNotFoundException("Книга с названием и автором  не найдена!"));
     }
 
-    @Cacheable(value = AppCacheProperties.CachesNames.DATABASE_BOOKS_BY_NAME_CATEGORY)
+    @Cacheable(value = AppCacheProperties.CacheNames.DATABASE_BOOKS_BY_NAME_CATEGORY)
     @Override
     public List<Book> findBooksByNameCategory(String nameCategory) {
         Category category = categoryService.findByName(nameCategory);
         return repository.findAllByCategory(category);
     }
 
-    @CacheEvict(value = {"databaseBooks", "databaseBooksById", "databaseBooksByNameCategory",
-            "databaseBooksByNameAndAuthor"}, allEntries = true)
+    @Caching(evict = {
+            @CacheEvict(value = "databaseBooks", allEntries = true),
+            @CacheEvict(value = "databaseBooksById", allEntries = true),
+            @CacheEvict(value = "databaseBooksByNameCategory", allEntries = true),
+            @CacheEvict(value = "databaseBooksByNameAndAuthor", allEntries = true),
+    })
+//    @CacheEvict(value = {"databaseBooks", "databaseBooksById", "databaseBooksByNameCategory",
+//            "databaseBooksByNameAndAuthor"}, allEntries = true)
     @Override
     public Book createBookWithCategory(Book book) {
         Book bookForSave = new Book();
@@ -84,8 +92,14 @@ public class BookServiceImpl implements BookService {
         return bookForSave;
     }
 
-    @CacheEvict(value = {"databaseBooks", "databaseBooksById", "databaseBooksByNameCategory",
-            "databaseBooksByNameAndAuthor"}, allEntries = true)
+    @Caching(evict = {
+            @CacheEvict(value = "databaseBooks", allEntries = true),
+            @CacheEvict(value = "databaseBooksById", allEntries = true),
+            @CacheEvict(value = "databaseBooksByNameCategory", allEntries = true),
+            @CacheEvict(value = "databaseBooksByNameAndAuthor", allEntries = true),
+    })
+//    @CacheEvict(value = {"databaseBooks", "databaseBooksById", "databaseBooksByNameCategory",
+//            "databaseBooksByNameAndAuthor"}, allEntries = true)
     @Override
     public Book updateBook(Book book) {
         Book bookForUpdate = findById(book.getId());
@@ -96,8 +110,14 @@ public class BookServiceImpl implements BookService {
         return repository.save(bookForUpdate);
     }
 
-    @CacheEvict(value = {"databaseBooks", "databaseBooksById", "databaseBooksByNameCategory",
-            "databaseBooksByNameAndAuthor"}, allEntries = true)
+    @Caching(evict = {
+            @CacheEvict(value = "databaseBooks", allEntries = true),
+            @CacheEvict(value = "databaseBooksById", allEntries = true),
+            @CacheEvict(value = "databaseBooksByNameCategory", allEntries = true),
+            @CacheEvict(value = "databaseBooksByNameAndAuthor", allEntries = true),
+    })
+//    @CacheEvict(value = {"databaseBooks", "databaseBooksById", "databaseBooksByNameCategory",
+//            "databaseBooksByNameAndAuthor"}, allEntries = true)
     @Override
     public void deleteById(Long id) {
         repository.deleteById(id);

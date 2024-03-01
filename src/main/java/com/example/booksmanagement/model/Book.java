@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -11,6 +13,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Builder
 @Entity
+@Table(name = "books")
 public class Book implements Serializable {
 
     @Id
@@ -21,9 +24,10 @@ public class Book implements Serializable {
 
     private String author;
 
+    @Column(name = "count_page")
     private int countPage;
 
     @ManyToOne
-    @JoinColumn(name = "book_id")
+    @JoinColumn(name = "category_id")
     private Category category;
 }

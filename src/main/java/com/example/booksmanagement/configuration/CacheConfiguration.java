@@ -43,7 +43,7 @@ public class CacheConfiguration {
             }
         };
 
-        var cacheNames = appCacheProperties.getCacheList();
+        var cacheNames = appCacheProperties.getCacheNames();
         if (!cacheNames.isEmpty()) {
             cacheManager.setCacheNames(cacheNames);
         }
@@ -59,9 +59,10 @@ public class CacheConfiguration {
 
         Map<String, RedisCacheConfiguration> redisCacheConfiguration = new HashMap<>();
 
-        appCacheProperties.getCacheList().forEach(cacheName -> {
-            redisCacheConfiguration.put(cacheName, RedisCacheConfiguration.defaultCacheConfig()).entryTtl(
-                    appCacheProperties.getCaches().get(cacheName).getExpiry());
+        appCacheProperties.getCacheNames().forEach(cacheName -> {
+            redisCacheConfiguration.put(cacheName, RedisCacheConfiguration.defaultCacheConfig().entryTtl(
+                    appCacheProperties.getCaches().get(cacheName).getExpiry()
+            ));
         });
 
         return RedisCacheManager.builder(lettuceConnectionFactory)

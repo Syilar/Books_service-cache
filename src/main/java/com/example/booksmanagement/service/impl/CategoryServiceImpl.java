@@ -16,7 +16,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public Category findByName(String name) {
         return repository.findFirstByName(name).orElseThrow(() ->
-                new EntityNotFoundException("Книги с категорией {} не найдены!"));
+                new EntityNotFoundException("Книги с категорией " + name + " не найдены!"));
     }
 
     @Override

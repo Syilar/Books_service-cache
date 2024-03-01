@@ -1,0 +1,29 @@
+spring:
+  jpa:
+#    open-in-view: false
+    generate-ddl: true
+  datasource:
+    hikari:
+      schema: app_schema
+      connection-init-sql: CREATE SCHEMA IF NOT EXISTS app_schema
+      connection-timeout: 10000
+
+app:
+  redis:
+    enable: true
+  cache:
+    cacheType: redis
+    cacheNames:
+      - databaseBooks
+      - databaseBooksByNameAndAuthor
+      - databaseBooksById
+      - databaseBooksByNameCategory
+    caches:
+      databaseBooks:
+        expiry: 10m
+      databaseBooksByNameAndAuthor:
+        expiry: 10m
+      databaseBooksById:
+        expiry: 10m
+      databaseBooksByNameCategory:
+        expiry: 10m
