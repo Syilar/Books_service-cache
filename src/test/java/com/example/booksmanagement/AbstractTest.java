@@ -45,8 +45,6 @@ public class AbstractTest {
 
     public static final String CATEGORY_NAME = "testCategoryName_1";
 
-    public static final Long UPDATED_CATEGORY_ID = 1L;
-
     @Autowired
     protected MockMvc mockMvc;
 
