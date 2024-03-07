@@ -1,7 +1,6 @@
 package com.example.booksmanagement.configuration;
 
 import com.example.booksmanagement.configuration.properties.AppCacheProperties;
-import com.example.booksmanagement.model.Book;
 import com.google.common.cache.CacheBuilder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -60,8 +59,7 @@ public class CacheConfiguration {
 
         appCacheProperties.getCacheNames().forEach(cacheName -> {
             redisCacheConfiguration.put(cacheName, RedisCacheConfiguration.defaultCacheConfig().entryTtl(
-                    appCacheProperties.getCaches().get(cacheName).getExpiry()
-            ));
+                    appCacheProperties.getCaches().get(cacheName).getExpiry()));
         });
 
         return RedisCacheManager.builder(lettuceConnectionFactory)
@@ -69,16 +67,4 @@ public class CacheConfiguration {
                 .withInitialCacheConfigurations(redisCacheConfiguration)
                 .build();
     }
-
-//    @Bean
-//    public RedisCacheConfiguration cacheConfiguration() {
-//        return RedisCacheConfiguration.defaultCacheConfig()
-//                .configureKeyConverters(configurer -> {
-//                    configurer.registerConverter(Book.class, String.class, book -> {
-//                        // Ваш код преобразования объекта Book в строку
-//                        return book.getId().toString();
-//                    });
-//                });
-//    }
-
 }

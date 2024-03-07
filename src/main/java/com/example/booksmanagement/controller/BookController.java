@@ -4,12 +4,15 @@ import com.example.booksmanagement.dto.BookListResponse;
 import com.example.booksmanagement.dto.BookResponse;
 import com.example.booksmanagement.dto.UpsertBookRequest;
 import com.example.booksmanagement.mapper.BookMapper;
+import com.example.booksmanagement.model.Book;
 import com.example.booksmanagement.service.BookService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/book")
@@ -32,7 +35,8 @@ public class BookController {
 
     @GetMapping("/{nameCategory}")
     public ResponseEntity<BookListResponse> findByNameCategory(@PathVariable String nameCategory) {
-        return ResponseEntity.ok(mapper.bookListToBookListResponse(service.findBooksByNameCategory(nameCategory)));
+        List<Book> bookList = service.findBooksByNameCategory(nameCategory);
+        return ResponseEntity.ok(mapper.bookListToBookListResponse(bookList));
     }
 
     @PostMapping

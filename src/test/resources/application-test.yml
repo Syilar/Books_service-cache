@@ -1,6 +1,5 @@
 spring:
   jpa:
-#    open-in-view: false
     generate-ddl: true
   datasource:
     hikari:
